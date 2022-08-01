@@ -6,9 +6,18 @@ import {
 import { AppModule } from './app.module';
 
 async function bootstrap() {
+  const bodyLimit = 524288000; // ~500 Mib
+
+  const adapter = new FastifyAdapter({
+    bodyLimit: bodyLimit,
+  });
+  const fastify = adapter.getInstance();
+
+  console.log(fastify.version);
+
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
-    new FastifyAdapter(),
+    adapter,
   );
   await app.listen(3000);
 }
